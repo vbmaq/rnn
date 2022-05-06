@@ -206,11 +206,13 @@ public class MultiLayerPerceptron {
         // I'll just assume the deltas are saved in this.bwbuffer. Otherwise, just change this.bwbuffer to this.deltas
         // in the ff implementation...
 
-        double[] prediction = this.act[this.act.length - 1].clone();
-        int outputSize = this.layer[this.layer.length - 1];
+        double[] prediction = this.act[layersnum - 1];
+        int outputSize = this.layer[layersnum - 1];
         for(int k=0; k<outputSize; k++){
             this.delta[this.layer.length - 1][k] = sigmoidDx(this.net[this.net.length-1][k])
                     * (prediction[k] - target[k]);              // delta_k (eq. 25)
+//            this.bwbuffer[layersnum - 1][k] = prediction[k] - target[k];
+
         }
 
         // calculate delta for the hidden layers
@@ -220,8 +222,9 @@ public class MultiLayerPerceptron {
                 double sum = 0;                                 // <-- second term of δ_h (eq. 26)
                 for (int k=0; k < this.layer[l+1]; k++){        // iterate through k neurons in next layer l+1
                     sum += this.weights[l+1][j][k] * this.delta[l+1][k];
+//                    bwbuffer[l][j] += weights[l+1][j][k] * bwbuffer[l+1][k];
                 }
-                this.delta[l][j] = sigmoidDx(this.net[l][j]) * sum;  // delta_h (eq. 26)
+                this.delta[l][j] = sigmoidDx(this.net[l][j])* sum;  // delta_h (eq. 26)
             }
         }
 
@@ -231,7 +234,7 @@ public class MultiLayerPerceptron {
         // this.dweights !!!!
         // ...
 
-        for(int l=1; l < this.layersnum - 1; l++){          // first hidden layer to output
+        for(int l=1; l <= this.layersnum - 1; l++){          // first hidden layer to output
             for(int j=0; j< this.layer[l]; j++){            // neuron j=0... in current layer
                 for(int i=0; i< this.layer[l-1]; i++){      // neuron i=0... in previous layer
                     var xi = this.act[l-1][i];       // activation of neuron i in previous layer
@@ -240,6 +243,8 @@ public class MultiLayerPerceptron {
                 }
             }
         }
+
+
 
     }
     
@@ -351,23 +356,27 @@ public class MultiLayerPerceptron {
 
             for (int index: indices
                  ) {
-                var pred = forwardPass(input[index]);
+                double[] pred = forwardPass(input[index]);
 
                 errorsum += RMSE(pred, target[index]);
 
                 prev_dweights = this.dweights.clone();
 
+//                System.out.println("Previous weights:" + weights);
                 backwardPass(target[index]);
+//                System.out.println("Current weights:" + weights);
 
                 for(int l=1; l<this.layersnum; l++){                // iterate from 1st hidden layer to output layer
                     for (int j=0; j<this.layer[l]; j++){            // j neurons of current layer
                         for (int ii=0; ii<this.layer[l-1]; ii++){   // ii neurons of previous layer
                             double momentumTerm = momentumrate * prev_dweights[l][ii][j];     // momentumRate * previous weight gradient
                             double dw = -learningrate * this.dweights[l][ii][j];
-                            this.weights[l][ii][j] += dw + momentumTerm;
+                            this.weights[l][ii][j] += dw;//+ momentumTerm;
+
                         }
                     }
                 }
+
             }
 
 
