@@ -369,9 +369,9 @@ public class MultiLayerPerceptron {
                 for(int l=1; l<this.layersnum; l++){                // iterate from 1st hidden layer to output layer
                     for (int j=0; j<this.layer[l]; j++){            // j neurons of current layer
                         for (int ii=0; ii<this.layer[l-1]; ii++){   // ii neurons of previous layer
-                            double momentumTerm = momentumrate * prev_dweights[l][ii][j];     // momentumRate * previous weight gradient
+                            double momentumTerm = -momentumrate * prev_dweights[l][ii][j];     // momentumRate * previous weight gradient
                             double dw = -learningrate * this.dweights[l][ii][j];
-                            this.weights[l][ii][j] += dw;//+ momentumTerm;
+                            this.weights[l][ii][j] += (dw + momentumTerm);
 
                         }
                     }
