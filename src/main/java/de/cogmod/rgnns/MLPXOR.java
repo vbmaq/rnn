@@ -23,14 +23,54 @@ public class MLPXOR {
         // set up network. biases are used by default, but
         // be deactivated using net.setBias(layer, false),
         // where layer gives the layer index (1 = the first hidden layer).
-        // 
-        final MultiLayerPerceptron net = new MultiLayerPerceptron(2, 20,  1);
+        //
+
+        int hiddenL = 50; //==>0.0069
+        double lr = 1;
+        double mr = 1;
+
+        hiddenL = 20; //==>0.0218       // without bias
+        lr = 0.1;
+        mr = 0.5;
+
+        hiddenL = 30; //==>0.0272
+        lr = 0.1;
+        mr = 0.5;
+
+        hiddenL = 40; //==>0.0275
+        lr = 0.1;
+        mr = 0.5;
+
+        hiddenL = 30; //==>0.0145
+        lr = 0.5;
+        mr = 0.5;
+
+        hiddenL = 30; //==>0.0107
+        lr = 0.75;
+        mr = 0.5;
+
+        hiddenL = 30; //==>0.009    < 0.01
+        lr = 1;
+        mr = 0.5;
+
+        hiddenL = 30; //==>0.0078
+        lr = 1;
+        mr = 1;
+
+        hiddenL = 50; //==>0.0077       // with bias
+        lr = 0.5;
+        mr = 1;
+
+
+
+
+        final MultiLayerPerceptron net = new MultiLayerPerceptron(2, hiddenL, 1);
         //
         // perform training.
         //
-        final int epochs = 10000000;         // don't change this value!
-        final double learningrate = 0.01;
-        final double momentumrate = 0.5;
+        final int epochs = 10000;         // don't change this value!
+        final double learningrate = lr;
+        final double momentumrate = mr;
         //
         // generate initial weights.
         //

@@ -203,8 +203,7 @@ public class MultiLayerPerceptron {
 
         // (VM) Plan: foreach neuron k of output layer, calculate the output deltas
         // (VM) I'm not sure if the instruction means to save all the deltas in this.bwbuffer or in this.delta :(
-        // I'll just assume the deltas are saved in this.bwbuffer. Otherwise, just change this.bwbuffer to this.deltas
-        // in the ff implementation...
+        // I'll just assume the deltas are saved in this.delta and ignore this.bwbuffer.
 
         double[] prediction = this.act[layersnum - 1];
         int outputSize = this.layer[layersnum - 1];
@@ -243,6 +242,8 @@ public class MultiLayerPerceptron {
                 }
             }
         }
+
+
 
 
 
@@ -362,9 +363,7 @@ public class MultiLayerPerceptron {
 
                 prev_dweights = this.dweights.clone();
 
-//                System.out.println("Previous weights:" + weights);
                 backwardPass(target[index]);
-//                System.out.println("Current weights:" + weights);
 
                 for(int l=1; l<this.layersnum; l++){                // iterate from 1st hidden layer to output layer
                     for (int j=0; j<this.layer[l]; j++){            // j neurons of current layer
@@ -372,14 +371,19 @@ public class MultiLayerPerceptron {
                             double momentumTerm = momentumrate * prev_dweights[l][ii][j];     // momentumRate * previous weight gradient
                             double dw = learningrate * this.dweights[l][ii][j];
                             this.weights[l][ii][j] -= (dw + momentumTerm);
-
                         }
                     }
                 }
 
+                for(int l=1; l< this.layersnum; l++){
+                    var biasRow = this.layer[l-1];
+                    for(int j=0; j<this.layer[l]; j++){
+                        this.weights[l][biasRow][j] += learningrate * this.delta[l][j];
+                    }
+
+                }
+
             }
-
-
 
             // ...
             
