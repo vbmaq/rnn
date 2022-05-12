@@ -59,16 +59,23 @@ public class MLPXOR {
 
         hiddenL = 50; //==>0.0077       // with bias
         lr = 0.5;
+        mr = 0.5;
+
+        // with 2nd hidden layer=25     // 0.0066
+
+        hiddenL = 20; //==> 0.0054      //2ndHL = 20 with bias
+        lr = 0.5;
+        mr = 0.5;
+
+        hiddenL = 25; //==> 0.0047      //2ndHL = 20 with bias
+        lr = 0.5;
         mr = 1;
 
-
-
-
-        final MultiLayerPerceptron net = new MultiLayerPerceptron(2, hiddenL, 1);
+        final MultiLayerPerceptron net = new MultiLayerPerceptron(2, 20, 1);
         //
         // perform training.
         //
-        final int epochs = 10000;         // don't change this value!
+        final int epochs = 100000;         // don't change this value!
         final double learningrate = lr;
         final double momentumrate = mr;
         //

@@ -15,6 +15,7 @@ public class MultiLayerPerceptron {
     
     public final static double BIAS = 1.0;
     
+
     private int layersnum;
     private int inputsize;
     private int weightsnum;
